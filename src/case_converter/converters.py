@@ -11,3 +11,15 @@ def getSnakeRegex():
 def getKebabRegex():
     # TODO
     return re.compile()
+
+def convertToCamel(inp, out, regex):
+    # TODO
+    pass
+
+def convertToSnake(inp, out, regex):
+    # TODO
+    pass
+
+def convertToKebab(inp, out, regex):
+    # TODO
+    pass
