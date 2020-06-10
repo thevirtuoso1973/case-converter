@@ -1,5 +1,5 @@
 # case-converter
-Convert the case of names in your source code.
+Convert the case of names/identifiers in your source code.
 
 # Supported Cases
 
