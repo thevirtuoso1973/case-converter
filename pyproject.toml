@@ -3,7 +3,7 @@ name = "case-converter"
 version = "0.1.0"
 description = "Convert the case of names/identifiers in your source code."
 authors = ["thevirtuoso1973"]
-license = "LGPL"
+license = "LGPL-3.0-only"
 readme = "README.md"
 
 [tool.poetry.dependencies]

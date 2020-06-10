@@ -6,7 +6,7 @@ from . import __version__, converters
 @click.version_option(version=__version__)
 @click.argument("filename", type=click.Path(exists=True, allow_dash=True),
                 default="-")
-@click.option("-o", "--output", type=click.Path(exists=True, allow_dash=True),
+@click.option("-o", "--output", type=click.Path(allow_dash=True),
               default="-", show_default=True, help="file to output to")
 @click.option("-f", "--from", "from_",
               type=click.Choice([converters.Case.CAMEL.value,
@@ -29,15 +29,26 @@ def main(filename, output, from_, to, encoding):
     Takes plaintext from stdin and prints to stdout by default.
     """
     try:
-        with click.open_file(filename, "r", encoding) as inStream, \
-            click.open_file(filename, "w", encoding) as outStream:
-            if to == converters.Case.CAMEL.value:
-                converters.convertToCamel(inStream, outStream, from_)
-            elif to == converters.Case.SNAKE.value:
-                converters.convertToSnake(inStream, outStream, from_)
-            elif to == converters.Case.KEBAB.value:
-                converters.convertToKebab(inStream, outStream, from_)
-            else:
-                click.echo("Something went wrong.")
+        if filename == output:
+            with click.open_file(filename, "r+", encoding) as inStream:
+                if to == converters.Case.CAMEL.value:
+                    converters.convertToCamel(inStream, inStream, from_)
+                elif to == converters.Case.SNAKE.value:
+                    converters.convertToSnake(inStream, inStream, from_)
+                elif to == converters.Case.KEBAB.value:
+                    converters.convertToKebab(inStream, inStream, from_)
+                else:
+                    click.echo("Something went wrong.")
+        else:
+            with click.open_file(filename, "r", encoding) as inStream, \
+                click.open_file(output, "w", encoding) as outStream:
+                if to == converters.Case.CAMEL.value:
+                    converters.convertToCamel(inStream, outStream, from_)
+                elif to == converters.Case.SNAKE.value:
+                    converters.convertToSnake(inStream, outStream, from_)
+                elif to == converters.Case.KEBAB.value:
+                    converters.convertToKebab(inStream, outStream, from_)
+                else:
+                    click.echo("Something went wrong.")
     except LookupError:
         click.echo("Invalid encoding.")

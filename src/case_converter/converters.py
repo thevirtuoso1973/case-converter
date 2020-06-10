@@ -42,6 +42,7 @@ def convertToSnake(inp, out, currCase):
                 newLine = newLine[:match.start()]+newId+newLine[match.end():]
                 match = regex.search(newLine) # check for another one
             currOut += newLine
+        out.seek(0) # in case inp == out
         out.write(currOut)
 
 def convertToKebab(inp, out, currCase):
@@ -55,7 +56,8 @@ def stringToSnake(toConvert, currCase):
     """
     out = ""
     if currCase == Case.CAMEL.value:
-        for char in toConvert:
+        out += toConvert[0] # I assume toConvert is non-empty
+        for char in toConvert[1:]:
             if char.isupper():
                 out += '_'+char.lower()
             else:
