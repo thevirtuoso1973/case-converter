@@ -7,28 +7,36 @@ from case_converter import console
 def runner():
     return click.testing.CliRunner()
 
-def test_files(runner):
+@pytest.mark.parametrize("inputString, expectedString, from_, to", [
+    ("def myCamelFunc():\n",  "def my_camel_func():\n", 'camel', 'snake'),
+    ("def my_camel_func():\n", "def myCamelFunc():\n", 'snake', 'camel')
+])
+def test_different_files(inputString, expectedString, from_, to, runner):
     with runner.isolated_filesystem():
         with open('temp.txt', 'w') as f:
-            f.write("def myCamelFunc():\n")
+            f.write(inputString)
         result = runner.invoke(console.main,
                                ['temp.txt',
-                                '--from', 'camel',
-                                '--to', 'snake',
+                                '--from', from_,
+                                '--to', to,
                                 '-o', 'tempOut.txt'])
         assert result.exit_code == 0
         with open('tempOut.txt', 'r') as f:
-            assert f.read() == "def my_camel_func():\n"
+            assert f.read() == expectedString
 
-def test_same_file(runner):
+@pytest.mark.parametrize("inputString, expectedString, from_, to", [
+    ("def myCamelFunc():\n",  "def my_camel_func():\n", 'camel', 'snake'),
+    ("def my_camel_func():\n", "def myCamelFunc():\n", 'snake', 'camel')
+])
+def test_same_files(inputString, expectedString, from_, to, runner):
     with runner.isolated_filesystem():
         with open('temp.txt', 'w') as f:
-            f.write("def myCamelFunc():\n")
+            f.write(inputString)
         result = runner.invoke(console.main,
                                ['temp.txt',
-                                '--from', 'camel',
-                                '--to', 'snake',
+                                '--from', from_,
+                                '--to', to,
                                 '-o', 'temp.txt'])
         assert result.exit_code == 0
         with open('temp.txt', 'r') as f:
-            assert f.read() == "def my_camel_func():\n"
+            assert f.read() == expectedString

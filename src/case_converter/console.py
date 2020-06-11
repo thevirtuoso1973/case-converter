@@ -29,7 +29,7 @@ def main(filename, output, from_, to, encoding):
     Takes plaintext from stdin and prints to stdout by default.
     """
     try:
-        if filename == output:
+        if filename != "-" and filename == output:
             with click.open_file(filename, "r+", encoding) as inStream:
                 if to == converters.Case.CAMEL.value:
                     converters.convertToCamel(inStream, inStream, from_)
