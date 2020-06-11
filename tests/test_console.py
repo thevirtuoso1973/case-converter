@@ -9,7 +9,9 @@ def runner():
 
 @pytest.mark.parametrize("inputString, expectedString, from_, to", [
     ("def myCamelFunc():\n",  "def my_camel_func():\n", 'camel', 'snake'),
-    ("def my_camel_func():\n", "def myCamelFunc():\n", 'snake', 'camel')
+    ("def myCamelFunc():\n",  "def my-camel-func():\n", 'camel', 'kebab'),
+    ("def my_camel_func():\n", "def myCamelFunc():\n", 'snake', 'camel'),
+    ("def my_camel_func():\n", "def my-camel-func():\n", 'snake', 'kebab'),
 ])
 def test_different_files(inputString, expectedString, from_, to, runner):
     with runner.isolated_filesystem():
@@ -26,7 +28,9 @@ def test_different_files(inputString, expectedString, from_, to, runner):
 
 @pytest.mark.parametrize("inputString, expectedString, from_, to", [
     ("def myCamelFunc():\n",  "def my_camel_func():\n", 'camel', 'snake'),
-    ("def my_camel_func():\n", "def myCamelFunc():\n", 'snake', 'camel')
+    ("def myCamelFunc():\n",  "def my-camel-func():\n", 'camel', 'kebab'),
+    ("def my_camel_func():\n", "def myCamelFunc():\n", 'snake', 'camel'),
+    ("def my_camel_func():\n", "def my-camel-func():\n", 'snake', 'kebab'),
 ])
 def test_same_files(inputString, expectedString, from_, to, runner):
     with runner.isolated_filesystem():

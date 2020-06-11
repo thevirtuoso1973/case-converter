@@ -62,8 +62,21 @@ def convertToSnake(inp, out, currCase):
         out.write(currOut)
 
 def convertToKebab(inp, out, currCase):
-    # TODO
-    pass
+    regex = getRegex(currCase)
+    if regex:
+        currOut = ""
+        for i,line in enumerate(inp):
+            match = regex.search(line)
+            newLine = line
+            while match:
+                newId = stringToKebab(match.group(), currCase)
+                newLine = newLine[:match.start()]+newId+newLine[match.end():]
+                match = regex.search(newLine) # check for another one
+            currOut += newLine
+        if (out.seekable()):
+            out.seek(0)
+            out.truncate()
+        out.write(currOut)
 
 def stringToCamel(toConvert, currCase):
     out = ""
@@ -80,7 +93,15 @@ def stringToCamel(toConvert, currCase):
             else:
                 out += char
     elif currCase == Case.KEBAB.value:
-        raise NotImplementedError # TODO
+        makeCap = False
+        for char in toConvert:
+            if char == '-':
+                makeCap = True
+            elif makeCap:
+                out += char.upper()
+                makeCap = False
+            else:
+                out += char
     return out
 
 def stringToSnake(toConvert, currCase):
@@ -90,8 +111,7 @@ def stringToSnake(toConvert, currCase):
     """
     out = ""
     if currCase == Case.CAMEL.value:
-        out += toConvert[0] # I assume toConvert is non-empty
-        for char in toConvert[1:]:
+        for char in toConvert:
             if char.isupper():
                 out += '_'+char.lower()
             else:
@@ -99,14 +119,27 @@ def stringToSnake(toConvert, currCase):
     elif currCase == Case.SNAKE.value:
         out = toConvert
     elif currCase == Case.KEBAB.value:
-        out += toConvert[0]
-        for char in toConvert[1:]:
-            if char.isupper():
-                out += '-'+char.lower()
+        for char in toConvert:
+            if char == '-':
+                out += '_'
             else:
                 out += char
     return out
 
 def stringToKebab(toConvert, currCase):
-    # TODO
-    pass
+    out = ""
+    if currCase == Case.CAMEL.value:
+        for char in toConvert:
+            if char.isupper():
+                out += '-' + char.lower()
+            else:
+                out += char
+    elif currCase == Case.SNAKE.value:
+        for char in toConvert:
+            if char == '_':
+                out += '-'
+            else:
+                out += char
+    elif currCase == Case.KEBAB.value:
+        out = toConvert
+    return out

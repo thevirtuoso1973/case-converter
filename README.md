@@ -13,3 +13,7 @@ TODO
 - PascalCase
 - SCREAMING_SNAKE_CASE
 - Camel_Snake_Case
+
+# Development
+
+Run tests with `poetry run pytest` in the root project directory.
