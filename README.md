@@ -1,8 +1,14 @@
 # case-converter
 Convert the case of names/identifiers in your source code.
 
+# Install
+`poetry build` from the root project directory and `pip install --user [the wheel file]`,
+where [the wheel file] is the generated wheel file.
+
 # Usage
-TODO
+`case-converter [OPTIONS] [FILENAME]`
+
+Use `case-converter --help` for full help info.
 
 # Supported Cases
 - camelCase (aka. lowerCaseWithCapitalDelimiters)
